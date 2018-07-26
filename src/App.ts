@@ -14,11 +14,11 @@ class App {
   // public camera = new OrthographicCamera( width / - 2, width / 2, height / 2, height / - 2, 1, 1000 );
   private renderer = new WebGLRenderer();
   public dots: Dot[] = [];
-  public step = .05;
+  public step = .01;
   public currentCamPos = 0;
-  public fov = 8;
-  public resetProbability = 5;
-  public numParticles = 5000;
+  public fov = 10;
+  public resetProbability = 1;
+  public numParticles = 8000;
   public frame = 0;
 
   constructor(root: HTMLDivElement) {
@@ -75,7 +75,7 @@ class App {
       dot.setPosition(nPos);
     }
     else {
-      dot.reset();
+      dot.setPosition(this.randomPos());
     }
   }
 
