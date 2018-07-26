@@ -1,4 +1,5 @@
-import { Scene, WebGLRenderer, Vector3, PerspectiveCamera } from 'three';
+import { Scene, WebGLRenderer, Vector3, PerspectiveCamera, OrthographicCamera } from 'three';
+import locations from './locations';
 import equation from './equation';
 import Dot from './Dot';
 import { calcPosition } from './utils';
@@ -9,20 +10,36 @@ const height = window.innerHeight;
 class App {
   public root: HTMLDivElement;
   public scene = new Scene();
-  public camera = new PerspectiveCamera( 90, width / height, -500, 250 );
+  public camera = new PerspectiveCamera( 45, width / height, 1, 1000 );
+  // public camera = new OrthographicCamera( width / - 2, width / 2, height / 2, height / - 2, 1, 1000 );
   private renderer = new WebGLRenderer();
   public dots: Dot[] = [];
-  public step = .001;
-
-  public time = 0;
+  public step = .05;
+  public currentCamPos = 0;
+  public fov = 8;
+  public resetProbability = 5;
+  public numParticles = 5000;
+  public frame = 0;
 
   constructor(root: HTMLDivElement) {
     this.root = root;
+    this.setCamLocation(0);
+    document.querySelector('#toggle').addEventListener('click', () => {
+      this.toggleCam();
+    });
+    // this.camera.zoom = 2;
+    // this.camera.updateProjectionMatrix();
+  }
+
+  setCamLocation(loc: number) {
+    const pos = locations[loc].map(coord => coord * (this.fov * 1.75));
+    this.camera.position.set(pos[0], pos[1], pos[2]);
+    this.camera.lookAt(-pos[0], -pos[1], -pos[2]);
   }
 
   randomPos() {
-    const min = -500;
-    const max = 250;
+    const min = -this.fov * 2;
+    const max = this.fov;
 
     return new Vector3(Math.random() * min + max, Math.random() * min + max, Math.random() * min + max);
   }
@@ -33,33 +50,39 @@ class App {
     this.root.appendChild( this.renderer.domElement );
 
     // Initialize dots
-    for (let i = 0; i < 5000; i++) {
+    for (let i = 0; i < this.numParticles; i++) {
       this.dots.push(new Dot(this.randomPos()));
     }
     
     // this.cube = new Mesh( geometry, material );
     this.dots.forEach(dot => this.scene.add(dot));
-    this.camera.position.z = 5;
     this.render();
   }
 
   render() {
     this.dots.forEach(dot => this.moveDot(dot));
     this.renderer.render(this.scene, this.camera);
+    this.frame++;
     requestAnimationFrame(() => this.render());
   }
 
   moveDot(dot: Dot) {
-    const reset = !(Math.random() * 100 > 1);
+    const reset = !(Math.random() * 100 > this.resetProbability);
     if (!reset) {
       const oPos = dot.position;
-      const slope = equation(oPos);
+      const slope = equation(oPos, this.frame);
       const nPos = calcPosition(oPos, slope, this.step);
       dot.setPosition(nPos);
     }
     else {
-      dot.setPosition(this.randomPos());
+      dot.reset();
     }
+  }
+
+  toggleCam() {
+    this.currentCamPos++;
+    if (this.currentCamPos === locations.length) this.currentCamPos = 0;
+    this.setCamLocation(this.currentCamPos);
   }
 }
 
