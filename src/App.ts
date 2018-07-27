@@ -1,4 +1,4 @@
-import { Scene, WebGLRenderer, Vector3, PerspectiveCamera, OrthographicCamera } from 'three';
+import { Scene, WebGLRenderer, Vector3, PerspectiveCamera } from 'three';
 import locations from './locations';
 import equation from './equation';
 import Dot from './Dot';
@@ -14,12 +14,15 @@ class App {
   // public camera = new OrthographicCamera( width / - 2, width / 2, height / 2, height / - 2, 1, 1000 );
   private renderer = new WebGLRenderer();
   public dots: Dot[] = [];
-  public step = .01;
-  public currentCamPos = 0;
-  public fov = 10;
-  public resetProbability = 1;
-  public numParticles = 8000;
   public frame = 0;
+
+  // Settings
+  public step = .05;
+  public currentCamPos = 0;
+  public fov = 2;
+  public resetProbability = 2;
+  public numParticles = 3000;
+  public dotRadius = .01;
 
   constructor(root: HTMLDivElement) {
     this.root = root;
@@ -51,7 +54,7 @@ class App {
 
     // Initialize dots
     for (let i = 0; i < this.numParticles; i++) {
-      this.dots.push(new Dot(this.randomPos()));
+      this.dots.push(new Dot(this.randomPos(), this.dotRadius));
     }
     
     // this.cube = new Mesh( geometry, material );
@@ -68,15 +71,13 @@ class App {
 
   moveDot(dot: Dot) {
     const reset = !(Math.random() * 100 > this.resetProbability);
-    if (!reset) {
-      const oPos = dot.position;
-      const slope = equation(oPos, this.frame);
-      const nPos = calcPosition(oPos, slope, this.step);
-      dot.setPosition(nPos);
-    }
-    else {
+    if (reset) {
       dot.setPosition(this.randomPos());
     }
+    const oPos = dot.position;
+    const slope = equation(oPos, this.frame);
+    const nPos = calcPosition(oPos, slope, this.step);
+    dot.setPosition(nPos);
   }
 
   toggleCam() {

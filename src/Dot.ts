@@ -2,17 +2,14 @@ import {
   SphereGeometry,
   Mesh,
   Vector3,
-  MeshDepthMaterial,
-  MeshNormalMaterial,
-  MeshStandardMaterial,
   MeshBasicMaterial
 } from 'three';
 
 class Dot extends Mesh {
   public originalPosition: Vector3;
 
-  constructor(pos: Vector3) {
-    const geometry = new SphereGeometry( .01, 10, 10 );
+  constructor(pos: Vector3, radius: number) {
+    const geometry = new SphereGeometry(radius, 6, 8);
     const material = new MeshBasicMaterial();
     super(geometry, material);
     this.originalPosition = pos;
