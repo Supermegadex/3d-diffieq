@@ -1,21 +1,45 @@
-import { Vector2, Vector3 } from "three";
+import { Vector3 } from "three";
 
-function length(vector: Vector3): number {
-  let square_sum = (vector.x ** 2) + (vector.y ** 2) + (vector.z ** 2);
-  return Math.sqrt(square_sum);
+const utils = {
+  length(vector: Vector3): number {
+    let square_sum = (vector.x ** 2) + (vector.y ** 2) + (vector.z ** 2);
+    return Math.sqrt(square_sum);
+  },
+
+  step(edge: number, x: number): number {
+    return x < edge ? 0 : 1;
+  }
 }
 
-function step(edge: number, x: number): number {
-  return x < edge ? 0 : 1;
-}
+let temp: any;
+let useTemp = false;
 
-export default (p: Vector3, frame: number): Vector3 => {
-  let v = new Vector3(0, 0, 0);
+export default (func: any, p: Vector3, frame: number, edit: boolean): any => {
+  if (edit) {
+    let success = true;
+    try {
+      func.bind(this)(p, frame, Vector3, utils);
+    }
+    catch (err) {
+      console.log("Cannot execute transform: ", err);
+      success = false;
+    }
 
-  v.x = Math.min(Math.sin(Math.exp(p.x)),Math.sin(length(p)));
-  v.y = Math.sin(p.x);
-  
-  return v;
+    if (success) {
+      useTemp = false;
+      temp = func;
+    }
+    else {
+      useTemp = true;
+    }
+  }
+
+  if (useTemp) {
+    return temp.bind(this)(p, frame, Vector3, utils) || new Vector3(0,0,0);
+  }
+  else {
+    return func.bind(this)(p, frame, Vector3, utils) || new Vector3(0,0,0);
+  }
 }
 
 /*
