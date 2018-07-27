@@ -3,6 +3,7 @@ import locations from './locations';
 import equation from './equation';
 import Dot from './Dot';
 import { calcPosition } from './utils';
+import events from './events';
 
 const width = window.innerWidth;
 const height = window.innerHeight;
@@ -12,9 +13,12 @@ class App {
   public scene = new Scene();
   public camera = new PerspectiveCamera( 45, width / height, 1, 1000 );
   // public camera = new OrthographicCamera( width / - 2, width / 2, height / 2, height / - 2, 1, 1000 );
-  private renderer = new WebGLRenderer();
+  public renderer = new WebGLRenderer();
   public dots: Dot[] = [];
   public frame = 0;
+  public input: HTMLTextAreaElement = document.querySelector("#formula");
+  private f: any;
+  private edit = true;
 
   // Settings
   public step = .05;
@@ -23,15 +27,35 @@ class App {
   public resetProbability = 2;
   public numParticles = 3000;
   public dotRadius = .01;
+  public func = `let v = new Vector3(0, 0, 0);
+
+v.x = .5 * p.x;
+v.y = -.5;
+v.z = -.25;
+    
+return v;
+`
 
   constructor(root: HTMLDivElement) {
     this.root = root;
     this.setCamLocation(0);
-    document.querySelector('#toggle').addEventListener('click', () => {
-      this.toggleCam();
-    });
-    // this.camera.zoom = 2;
-    // this.camera.updateProjectionMatrix();
+    this.updateF();
+    this.input.value = this.func;
+    events(this);
+  }
+
+  updateF() {
+    this.edit = true;
+    let success = true;
+    let form: any;
+    try {
+      form = Function("p", "frame", "Vector3", "utils", this.func);
+    }
+    catch (err) {
+      success = false;
+      console.info("Couldn't parse formula: ", err);
+    }
+    if (success) this.f = form;
   }
 
   setCamLocation(loc: number) {
@@ -75,7 +99,8 @@ class App {
       dot.setPosition(this.randomPos());
     }
     const oPos = dot.position;
-    const slope = equation(oPos, this.frame);
+    const slope = equation(this.f, oPos, this.frame, this.edit);
+    this.edit = false;
     const nPos = calcPosition(oPos, slope, this.step);
     dot.setPosition(nPos);
   }
