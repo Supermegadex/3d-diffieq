@@ -13,5 +13,5 @@ gulp.task('webpack', function(){
     .pipe(gulp.dest('dist/'))
 });
 
-gulp.task('default', [ 'copy', 'webpack' ]);
+exports.default = gulp.parallel('copy', 'webpack');
 

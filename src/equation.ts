@@ -9,7 +9,7 @@ const utils = {
   step(edge: number, x: number): number {
     return x < edge ? 0 : 1;
   }
-}
+};
 
 let temp: any;
 let useTemp = false;

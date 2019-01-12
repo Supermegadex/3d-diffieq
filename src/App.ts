@@ -24,7 +24,7 @@ class App {
   public step = .05;
   public currentCamPos = 0;
   public fov = 2;
-  public resetProbability = 2;
+  public resetProbability = 1;
   public numParticles = 3000;
   public dotRadius = .01;
   public func = `let v = new Vector3(0, 0, 0);
@@ -34,7 +34,7 @@ v.y = -.5;
 v.z = -.25;
     
 return v;
-`
+`;
 
   constructor(root: HTMLDivElement) {
     this.root = root;
