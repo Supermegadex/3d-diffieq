@@ -1,0 +1,260 @@
+dx/dt = -z, dy/dt = -x2 - y, dz/dt = 1.7 + 1.7x + y
+
+let v = new Vector3(0, 0, 0);
+
+v.x = -p.z;
+v.y = -(p.x * p.x) - p.y;
+v.z = 1.7 + 1.7 * p.x + p.y;
+    
+return v;
+
+
+
+
+let v = new Vector3(0, 0, 0);
+
+v.x = -p.y;
+v.y = p.x + p.z;
+v.z = (p.x * p.z) + (3 * (p.y * p.y));
+    
+return v;
+
+
+
+
+dx/dt = -0.2y, dy/dt = x + z, dz/dt = x + y2 - z
+
+let v = new Vector3(0, 0, 0);
+
+v.x = -.2 * p.y;
+v.y = p.x + p.z;
+v.z = p.x + p.y ** 2 - p.z;
+    
+return v;
+
+
+
+let v = new Vector3(0, 0, 0);
+
+v.x = (p.x * 2) ** 3 + (Math.random() * 2 - 1) / 100;
+v.y = (p.y * 2) ** 3 + (Math.random() * 2 - 1) / 100;
+v.z = (p.z * 2) ** 3 + (Math.random() * 2 - 1) / 100;
+    
+return v;
+
+
+
+
+dx/dt = y, dy/dt = x - z, dz/dt = x + xz + 2.7y
+
+let v = new Vector3(0, 0, 0);
+
+v.x = p.y;
+v.y = p.x - p.z;
+v.z = p.x + p.x * p.z + 2.7 * p.y;
+    
+return v;
+
+
+
+dx/dt = y + 3.9z, dy/dt = 0.9x2 - y, dz/dt = 1 - x
+
+let v = new Vector3(0, 0, 0);
+
+v.x = p.y + 3.9 * p.z;
+v.y = 0.9 * p.x ** 2 - p.y;
+v.z = 1 - p.x;
+    
+return v;
+
+
+dx/dt = 0.4x + z, dy/dt = xz - y, dz/dt = -x + y
+
+let v = new Vector3(0, 0, 0);
+
+v.x = 0.4 * p.x + p.z;
+v.y = p.x * p.z - p.y;
+v.z = -p.x + p.y;
+    
+return v;
+
+
+
+
+
+
+let v = new Vector3(0, 0, 0);
+
+const a = 6;
+const b = 3;
+const c = 4;
+const d = 6;
+
+v.x = a * p.x * (1 - p.y) - b * p.z;
+v.y = -c * p.y * (1-p.x**2)
+v.z = d * p.x;
+    
+return v;
+
+
+
+
+
+
+
+Rampe 1 Attractor
+
+const a = .1;
+const b = .5;
+const c = -.77;
+const d = .75;
+const e = -.25;
+const f = .25;
+v.x=p.z*Math.sin(a*p.x)+Math.cos(b*p.y)
+v.y=p.x*Math.sin(c*p.y)+Math.cos(d*p.z)
+v.z=p.y*Math.sin(e*p.z)+Math.cos(f*p.x)
+
+Rampe 2
+
+v.x = p.x * Math.sin(a * p.x) + Math.cos(b * p.y);
+v.y = p.y * Math.sin(c * p.y) + Math.cos(d * p.z);
+v.z = p.z * Math.sin(e * p.z) + Math.cos(f * p.x);
+
+
+
+
+Lorenz
+
+v.x = a * (p.y - p.x);
+v.y = p.x * (b - p.z) - p.y;
+v.z = p.x * p.y - c * p.z;
+
+
+a,b,c,d
+
+const a = 4;
+const b = 9;
+const c = 4;
+const d = 4;
+
+v.x = a * (p.y - x);
+v.y = b * p.x - c * p.x * p.z;
+v.z = Math.exp(p.x * p.y) - d * p.z;
+
+
+
+
+v.x = a * p.x - p.y * p.z;
+v.y = -b * p.y + p.x * p.z;
+v.z = -c * p.z + p.x * p.y * p.z + d;
+
+
+
+v.x = a * (p.y - p.x) + p.y * p.z;
+v.y = (c - a) * p.x + c * p.y - p.x * p.z;
+v.z = p.x * p.y - b * p.z;
+
+Math.sqrt(p.z);
+
+
+v.x = p.y;
+v.y = p.z;
+v.z = -p.y + 3 * p.y**2 - p.x**2 - p.x * p.z - a;
+
+
+
+v.x = p.y * p.z + a;
+v.y = p.y**2 - p.y;
+v.z = 1 - 4 * p.x;
+
+
+v.x = -p.y - p.z;
+v.y = p.x + a * p.y;
+v.z = b + p.z * (p.x - c);
+
+
+
+
+v.x = Math.sin(p.y) + Math.cos(p.z);
+v.y = Math.sin(p.z) + Math.cos(p.x);
+v.z = Math.sin(p.x) + Math.cos(p.y);
+
+
+
+
+
+
+
+
+let v = new Vector3(0, 0, 0);
+
+if (Math.floor(frame / 100) % 2 === 1) {
+v.x = Math.sin(p.y - p.z);
+v.y = Math.cos(p.z + p.y);
+v.z = Math.sin(p.x + p.y);
+}
+else {
+v.x = Math.sin(p.y - p.z);
+v.y = Math.cos(p.z + p.y);
+v.z = Math.sin(p.x + p.y);
+}
+    
+return v;
+
+
+
+
+let v = new Vector3(0, 0, 0);
+
+const a = 6;
+const b = 3;
+const c = 4;
+const d = 6;
+
+if (Math.floor(frame / 500) % 2 === 1) {
+v.x = 0.4 * p.x + p.z;
+v.y = p.x * p.z - p.y;
+v.z = -p.x + p.y;
+}
+else {
+v.x = -p.z;
+v.y = -(p.x * p.x) - p.y;
+v.z = 1.7 + 1.7 * p.x + p.y;
+}
+    
+return v;
+
+const t = Math.floor(frame/60);
+
+Math.sin()
+
+length(p)
+
+const t = frame / 60;
+
+v.x = Math.sin(t) * p.y;
+v.z = Math.sin(t) * p.x;
+v.y = Math.sin(t) * p.z;
+
+
+Math.sin(p.y)
+
+
+
+Math.random() / 100;
+
+
+
+
+Math.sin(p)
+
+
+
+
+let a = 1;
+let b = 2;
+let c = 3;
+
+p.x = a * Math.sin(p.z) + c * Math.cos(p.y);
+p.y = b * Math.sin(p.x) + a * Math.cos(p.z);
+p.z = c * Math.sin(p.y) + b * Math.cos(p.x);

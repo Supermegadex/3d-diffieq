@@ -27,6 +27,12 @@ class App {
   public resetProbability = 1;
   public numParticles = 3000;
   public dotRadius = .01;
+  public singleTrajectory = false;
+  public x = 0;
+  public y = 0;
+  public z = 0;
+  public dotIndex = 0;
+  public trailLength = 3000;
   public func = `let v = new Vector3(0, 0, 0);
 
 v.x = .5 * p.x;
@@ -87,7 +93,13 @@ return v;
   }
 
   render() {
-    this.dots.forEach(dot => this.moveDot(dot));
+    if (this.singleTrajectory && this.dotIndex < this.trailLength) {
+      this.dots[this.dotIndex].position.set(this.x, this.y, this.z);
+    }
+    this.dots.forEach((dot, i) => this.singleTrajectory 
+    ? this.dotIndex >= i ? this.moveDot(dot) : void(0)
+    : this.moveDot(dot));
+    if (this.singleTrajectory && this.dotIndex < this.trailLength) this.dotIndex++;
     this.renderer.render(this.scene, this.camera);
     this.frame++;
     requestAnimationFrame(() => this.render());
@@ -109,6 +121,16 @@ return v;
     this.currentCamPos++;
     if (this.currentCamPos === locations.length) this.currentCamPos = 0;
     this.setCamLocation(this.currentCamPos);
+  }
+
+  doSingleTrajectory() {
+    this.singleTrajectory = true;
+    this.dotIndex = 0;
+    this.dots.forEach(dot => dot.position.set(9999, 9999, 9999));
+  }
+
+  stopSingleTrajectory() {
+    this.singleTrajectory = false;
   }
 }
 
